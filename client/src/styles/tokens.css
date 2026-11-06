@@ -1,0 +1,74 @@
+:root {
+  /* ==========================================================================
+     1. BẢNG MÀU THƯƠNG HIỆU (NUDE LUXURY + CINEMATIC EDITORIAL — MỤC IV.1)
+     ========================================================================== */
+  --color-bg-cream: #F7F1EA;
+  --color-surface-nude: #E8D4C9;
+  --color-accent-blush: #E8B7B1;
+  --color-accent-rose-pink: #C78F91;
+  --color-accent-rose-gold: #B98C68;
+  --color-text-charcoal: #342A2A;
+  --color-surface-warm-white: #FFFCF8;
+
+  /* Các sắc độ bổ trợ phái sinh từ bảng màu chính */
+  --color-text-muted: rgba(52, 42, 42, 0.72);
+  --color-text-subtle: rgba(52, 42, 42, 0.52);
+  --color-border-hairline: rgba(52, 42, 42, 0.12);
+  --color-border-accent: rgba(185, 140, 104, 0.38);
+  --color-overlay-editorial: rgba(52, 42, 42, 0.36);
+
+  /* Trạng thái ngữ nghĩa (Semantic Status Tokens) */
+  --color-status-success: #3E6B52;
+  --color-status-success-bg: rgba(62, 107, 82, 0.1);
+  --color-status-warning: #9C6B30;
+  --color-status-warning-bg: rgba(156, 107, 48, 0.12);
+  --color-status-danger: #9E3E42;
+  --color-status-danger-bg: rgba(158, 62, 66, 0.1);
+
+  /* ==========================================================================
+     2. TYPOGRAPHY (MỤC IV.2 — TỐI ĐA 2 HỆ FONT CHÍNH)
+     ========================================================================== */
+  --font-serif-editorial: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-sans-body: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  /* Cấp độ kích thước chữ (Fluid Editorial Scale) */
+  --text-display-hero: clamp(2.75rem, 5.2vw, 4.75rem);
+  --text-heading-xl: clamp(2rem, 3.6vw, 3.25rem);
+  --text-heading-lg: clamp(1.5rem, 2.4vw, 2.25rem);
+  --text-heading-md: clamp(1.25rem, 1.8vw, 1.6rem);
+  --text-body-lg: 1.125rem;
+  --text-body-md: 1rem;
+  --text-body-sm: 0.875rem;
+  --text-caption-xs: 0.75rem;
+
+  /* ==========================================================================
+     3. KHOẢNG TRỐNG, BO GÓC VÀ ĐỘ SÂU (SPACING, RADIUS & DEPTH)
+     ========================================================================== */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-8: 3rem;
+  --space-10: 4rem;
+  --space-12: 6rem;
+
+  --radius-sm: 4px;
+  --radius-md: 10px;
+  --radius-lg: 18px;
+  --radius-pill: 9999px;
+
+  --shadow-soft: 0 12px 32px -12px rgba(52, 42, 42, 0.08);
+  --shadow-elevated: 0 24px 48px -16px rgba(52, 42, 42, 0.16);
+  --shadow-focus-ring: 0 0 0 3px rgba(185, 140, 104, 0.35);
+
+  --container-max-width: 1280px;
+  --header-height: 80px;
+
+  /* Thời lượng và đường cong chuyển động */
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 180ms;
+  --duration-base: 360ms;
+  --duration-slow: 700ms;
+}

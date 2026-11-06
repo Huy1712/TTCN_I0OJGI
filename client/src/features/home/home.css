@@ -1,0 +1,316 @@
+/* ==========================================================================
+   CINEMATIC HOMEPAGE STYLES (TASK 03 — MULTI-LAYER DEPTH & ANIME AURA)
+   ========================================================================== */
+
+.hero-cinematic {
+  position: relative;
+  min-height: calc(100vh - var(--header-height));
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: linear-gradient(180deg, #241B1B 0%, #342A2A 68%, var(--color-bg-cream) 100%);
+  color: var(--color-surface-warm-white);
+}
+
+.hero-cinematic__backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.hero-cinematic__backdrop-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.34;
+  transform: scale(1.06);
+  transition: transform 0.35s var(--ease-editorial);
+}
+
+.hero-cinematic__backdrop-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 25%, rgba(232, 183, 177, 0.24), transparent 48%),
+    radial-gradient(circle at 80% 35%, rgba(185, 140, 104, 0.28), transparent 52%),
+    linear-gradient(90deg, rgba(36, 27, 27, 0.92) 0%, rgba(52, 42, 42, 0.72) 55%, rgba(52, 42, 42, 0.38) 100%);
+}
+
+.hero-cinematic__bottom-fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 140px;
+  background: linear-gradient(to top, var(--color-bg-cream), transparent);
+}
+
+/* Anime-inspired volumetric light beam */
+@keyframes heroLightSweep {
+  0%, 100% {
+    transform: translateX(-16%) rotate(-24deg);
+    opacity: 0.28;
+  }
+  50% {
+    transform: translateX(10%) rotate(-18deg);
+    opacity: 0.58;
+  }
+}
+
+@keyframes heroFloatSlow {
+  0%, 100% {
+    transform: translate3d(0, 0, 50px);
+  }
+  50% {
+    transform: translate3d(0, -10px, 50px);
+  }
+}
+
+.hero-cinematic__light-beam {
+  position: absolute;
+  top: -20%;
+  left: 28%;
+  width: 380px;
+  height: 140%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 252, 248, 0) 0%,
+    rgba(255, 244, 228, 0.55) 50%,
+    rgba(232, 183, 177, 0.3) 75%,
+    rgba(255, 252, 248, 0) 100%
+  );
+  filter: blur(24px);
+  z-index: 2;
+  pointer-events: none;
+  animation: heroLightSweep 11s ease-in-out infinite;
+}
+
+.hero-cinematic__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.hero-cinematic__content {
+  position: relative;
+  z-index: 4;
+  padding-top: var(--space-10);
+  padding-bottom: var(--space-12);
+}
+
+.hero-cinematic__grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: var(--space-10);
+  align-items: center;
+}
+
+.hero-cinematic__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-pill);
+  background: rgba(52, 42, 42, 0.72);
+  border: 1px solid rgba(232, 183, 177, 0.35);
+  backdrop-filter: blur(12px);
+  font-size: var(--text-caption-xs);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent-blush);
+  margin-bottom: var(--space-4);
+}
+
+.hero-cinematic__title {
+  font-family: var(--font-serif-editorial);
+  font-size: var(--text-display-hero);
+  line-height: 1.06;
+  color: var(--color-surface-warm-white);
+  margin-bottom: var(--space-5);
+}
+
+.hero-cinematic__title em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-accent-blush);
+}
+
+.hero-cinematic__lead {
+  font-size: var(--text-body-lg);
+  color: rgba(232, 212, 201, 0.92);
+  max-width: 54ch;
+  margin-bottom: var(--space-6);
+}
+
+.hero-cinematic__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.btn-hero-blush {
+  background-color: var(--color-accent-blush);
+  color: var(--color-text-charcoal);
+}
+
+.btn-hero-blush:hover {
+  background-color: var(--color-surface-warm-white);
+  transform: translateY(-2px);
+}
+
+.btn-hero-glass {
+  background: rgba(255, 252, 248, 0.12);
+  color: var(--color-surface-warm-white);
+  border: 1px solid rgba(255, 252, 248, 0.32);
+  backdrop-filter: blur(10px);
+}
+
+.btn-hero-glass:hover {
+  background: rgba(185, 140, 104, 0.38);
+  border-color: var(--color-accent-blush);
+}
+
+/* 3D Stage for Hero Nail Showcase */
+.hero-3d-perspective {
+  perspective: 1400px;
+}
+
+.hero-3d-stage {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.25s var(--ease-editorial);
+}
+
+.hero-3d-stage__frame {
+  position: relative;
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 252, 248, 0.28);
+  box-shadow: 0 32px 64px -16px rgba(0, 0, 0, 0.55);
+  background-color: var(--color-text-charcoal);
+  transform: translateZ(20px);
+}
+
+.hero-3d-stage__img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-3d-stage__caption {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: var(--space-5);
+  background: linear-gradient(to top, rgba(36, 27, 27, 0.9), transparent);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.hero-3d-floating-card {
+  position: absolute;
+  top: -22px;
+  left: -24px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 18px;
+  background: rgba(255, 252, 248, 0.88);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(185, 140, 104, 0.35);
+  color: var(--color-text-charcoal);
+  box-shadow: var(--shadow-elevated);
+  transform: translateZ(50px);
+  animation: heroFloatSlow 5.5s ease-in-out infinite;
+}
+
+.hero-3d-floating-card__thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+/* Product Cards with Depth */
+.editorial-product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: var(--space-6);
+}
+
+.editorial-product-card {
+  background-color: var(--color-surface-warm-white);
+  border: 1px solid var(--color-border-hairline);
+  border-radius: 22px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition:
+    transform var(--duration-base) var(--ease-editorial),
+    box-shadow var(--duration-base) var(--ease-editorial);
+}
+
+.editorial-product-card:hover {
+  transform: translate3d(0, -8px, 0);
+  box-shadow: var(--shadow-elevated);
+}
+
+.editorial-product-card__media {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background-color: var(--color-surface-nude);
+}
+
+.editorial-product-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--duration-slow) var(--ease-editorial);
+}
+
+.editorial-product-card:hover .editorial-product-card__img {
+  transform: scale(1.07);
+}
+
+.editorial-product-card__badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 252, 248, 0.86);
+  backdrop-filter: blur(10px);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-charcoal);
+}
+
+@media (max-width: 960px) {
+  .hero-cinematic__grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-3d-floating-card {
+    position: static;
+    margin-top: var(--space-3);
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-cinematic__light-beam,
+  .hero-3d-floating-card {
+    animation: none !important;
+  }
+}

@@ -1,3 +1,18 @@
+# Bỏ qua dependencies ở gốc và client
 node_modules
+client/node_modules
+
+# Bỏ qua các file môi trường / bí mật
 .env
-dist
+.env.*
+!.env.example
+client/.env
+client/.env.*
+
+# Bỏ qua thư mục build của client
+client/dist
+client/build
+
+# Bỏ qua log và cache
+*.log
+.DS_Store

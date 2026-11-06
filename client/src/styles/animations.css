@@ -1,0 +1,47 @@
+/* ==========================================================================
+   ANIMATIONS & PAGE TRANSITIONS (TUÂN THỦ MỤC IV.4 & PREFERS-REDUCED-MOTION)
+   ========================================================================== */
+
+@keyframes editorialFadeUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.page-transition-enter {
+  animation: editorialFadeUp var(--duration-base) var(--ease-editorial) both;
+}
+
+.hover-lift {
+  transition:
+    transform var(--duration-base) var(--ease-editorial),
+    box-shadow var(--duration-base) var(--ease-editorial);
+}
+
+.hover-lift:hover {
+  transform: translate3d(0, -4px, 0);
+  box-shadow: var(--shadow-elevated);
+}
+
+/* Tôn trọng thiết lập giảm chuyển động của hệ điều hành người dùng */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .page-transition-enter,
+  .hover-lift:hover {
+    animation: none !important;
+    transform: none !important;
+  }
+}
