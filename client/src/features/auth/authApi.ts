@@ -24,13 +24,22 @@ export interface LoginPayload {
   password: string;
 }
 
-// Cấu trúc chuẩn khớp với ApiResponseWrapper từ Backend
-interface ApiResponseWrapper<T> {
-  success: boolean;
-  message: string;
-  data: T;
-  error: string | null;
+export interface ShippingAddress {
+  id: number;
+  recipientName: string;
+  phone: string;
+  province: string;
+  ward: string;
+  addressLine: string;
+  isDefault: boolean;
+  createdAt: string;
+  updatedAt: string;
 }
+
+export type ShippingAddressInput = Omit<
+  ShippingAddress,
+  "id" | "createdAt" | "updatedAt"
+>;
 
 export interface AuthSessionData {
   user: AuthUser;
@@ -43,14 +52,14 @@ export interface CsrfTokenData {
 
 export const authApi = {
   async fetchCsrfToken(): Promise<string> {
-    const response = await apiClient.get<ApiResponseWrapper<CsrfTokenData>>("/auth/csrf-token");
+    const response = await apiClient.get<CsrfTokenData>("/auth/csrf-token");
     const token = response.data.csrfToken;
     setCsrfToken(token);
     return token;
   },
 
   async register(payload: RegisterPayload): Promise<AuthUser> {
-    const response = await apiClient.post<ApiResponseWrapper<AuthSessionData>>(
+    const response = await apiClient.post<AuthSessionData>(
       "/auth/register",
       payload
     );
@@ -62,7 +71,7 @@ export const authApi = {
   },
 
   async login(payload: LoginPayload): Promise<AuthUser> {
-    const response = await apiClient.post<ApiResponseWrapper<AuthSessionData>>(
+    const response = await apiClient.post<AuthSessionData>(
       "/auth/login",
       payload
     );
@@ -79,11 +88,51 @@ export const authApi = {
   },
 
   async getMe(): Promise<AuthUser> {
-    const response = await apiClient.get<ApiResponseWrapper<AuthSessionData>>("/auth/me");
+    const response = await apiClient.get<AuthSessionData>("/auth/me");
     const sessionData = response.data;
     if (sessionData?.csrfToken) {
       setCsrfToken(sessionData.csrfToken);
     }
     return sessionData.user;
+  },
+
+  async updateProfile(
+    payload: Pick<AuthUser, "fullName" | "phone">
+  ): Promise<AuthUser> {
+    const response = await apiClient.patch<AuthUser>(
+      "/account/profile",
+      payload
+    );
+    return response.data;
+  },
+
+  async getAddresses(): Promise<ShippingAddress[]> {
+    const response = await apiClient.get<ShippingAddress[]>(
+      "/account/addresses"
+    );
+    return response.data;
+  },
+
+  async createAddress(payload: ShippingAddressInput): Promise<ShippingAddress> {
+    const response = await apiClient.post<ShippingAddress>(
+      "/account/addresses",
+      payload
+    );
+    return response.data;
+  },
+
+  async updateAddress(
+    addressId: number,
+    payload: Partial<ShippingAddressInput>
+  ): Promise<ShippingAddress> {
+    const response = await apiClient.patch<ShippingAddress>(
+      `/account/addresses/${addressId}`,
+      payload
+    );
+    return response.data;
+  },
+
+  async deleteAddress(addressId: number): Promise<void> {
+    await apiClient.delete<null>(`/account/addresses/${addressId}`);
   },
 };

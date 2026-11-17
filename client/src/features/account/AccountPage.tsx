@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useStudio } from "../../app/StudioContext";
 import { formatVnd } from "../../config/brand";
 import { useAuth } from "../auth/AuthProvider";
+import { AccountSettings } from "./AccountSettings";
 
 export const AccountPage: React.FC = () => {
   const { user } = useAuth();
@@ -29,8 +30,12 @@ export const AccountPage: React.FC = () => {
             Xin Chào, {activeName}
           </h1>
           <p className="text-xs sm:text-sm text-[#342A2A]/75 mt-1">
-            Email: <strong>{activeEmail}</strong> &bull; Địa chỉ mặc định:{" "}
-            <strong>88 Đồng Khởi, Quận 1, TP. Hồ Chí Minh</strong>
+            Email: <strong>{activeEmail}</strong>
+            {user ? (
+              <>
+                {" "}&bull; Số điện thoại: <strong>{user.phone || "Chưa cập nhật"}</strong>
+              </>
+            ) : null}
           </p>
         </div>
 
@@ -50,6 +55,27 @@ export const AccountPage: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {user ? (
+        <AccountSettings />
+      ) : (
+        <div className="bg-[#FFFCF8] rounded-3xl p-6 sm:p-8 border border-[#342A2A]/10 text-center space-y-3">
+          <h2 className="font-serif-editorial text-2xl text-[#342A2A]">
+            Đăng nhập để quản lý hồ sơ
+          </h2>
+          <p className="text-sm text-[#342A2A]/70">
+            Đăng nhập để cập nhật thông tin cá nhân và lưu các địa chỉ nhận hàng.
+          </p>
+          <div className="flex justify-center gap-3">
+            <Link to="/login" className="px-5 py-2.5 rounded-full bg-[#342A2A] text-[#FFFCF8] text-xs font-semibold uppercase tracking-wider hover:bg-[#B98C68] transition">
+              Đăng nhập
+            </Link>
+            <Link to="/register" className="px-5 py-2.5 rounded-full border border-[#B98C68]/50 text-xs font-semibold uppercase tracking-wider hover:bg-[#E8D4C9] transition">
+              Tạo tài khoản
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Lịch sử Đơn hàng & Yêu cầu Thiết kế */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

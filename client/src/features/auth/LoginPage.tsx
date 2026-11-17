@@ -48,9 +48,7 @@ export const LoginPage: React.FC = () => {
   // Đợi cho AuthProvider load xong status ('loading' -> 'authenticated'/'unauthenticated')
   // Chỉ tự động redirect khi thực sự đã đăng nhập TỪ TRƯỚC và không phải đang tự Submit form
   if (status !== "loading" && isAuthenticated && user && !isSubmitting) {
-    const defaultTarget =
-      state?.from || (user.role === "ADMIN" ? "/admin" : "/account");
-    return <Navigate to={defaultTarget} replace />;
+    return <Navigate to="/" replace />;
   }
 
   const onSubmit = async (values: LoginFormValues): Promise<void> => {
@@ -64,10 +62,7 @@ export const LoginPage: React.FC = () => {
 
       // Nếu API thành công -> Mới cho phép chuyển hướng
       if (loggedInUser) {
-        const redirectTarget =
-          state?.from ||
-          (loggedInUser.role === "ADMIN" ? "/admin" : "/account");
-        navigate(redirectTarget, { replace: true });
+        navigate("/", { replace: true });
       }
     } catch (err: any) {
       // Bắt lỗi từ Backend/Database trả về (ví dụ INVALID_CREDENTIALS)
