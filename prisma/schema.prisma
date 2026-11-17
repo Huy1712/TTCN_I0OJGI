@@ -5,6 +5,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  engineType = "binary"
 }
 
 // ---------------------------------------------------------------------
@@ -106,6 +107,8 @@ enum NailShape {
   SQUARE
   STILETTO
   ROUND
+  OVAL
+  SHORT_OVAL
 }
 
 // ---------------------------------------------------------------------
@@ -294,6 +297,7 @@ model Order {
   userId Int         @map("user_id")
   user   User        @relation(fields: [userId], references: [id], onDelete: Restrict)
   idempotencyKey String @map("idempotency_key") @db.VarChar(64)
+  requestHash String @map("request_hash") @db.VarChar(64)
   customOrderId Int?        @unique @map("custom_order_id")
   customOrder   CustomOrder? @relation(fields: [customOrderId], references: [id], onDelete: Restrict)
 

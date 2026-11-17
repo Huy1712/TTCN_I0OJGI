@@ -12,7 +12,6 @@ export const AccountPage: React.FC = () => {
     orders,
     customRequests,
     acceptCustomRequestQuote,
-    openAuthModal,
   } = useStudio();
 
   const activeEmail = user?.email || demoUserEmail || "minhanh@nail-atelier.vn";
@@ -39,20 +38,13 @@ export const AccountPage: React.FC = () => {
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap justify-end gap-3">
           <Link
             to="/custom-design"
             className="px-5 py-2.5 rounded-full bg-[#342A2A] text-[#FFFCF8] text-xs font-semibold uppercase tracking-wider hover:bg-[#B98C68] transition"
           >
             + Gửi Yêu Cầu Thiết Kế Mới
           </Link>
-          <button
-            type="button"
-            onClick={openAuthModal}
-            className="px-4 py-2.5 rounded-full border border-[#B98C68]/50 text-xs font-semibold uppercase tracking-wider hover:bg-[#E8D4C9] transition"
-          >
-            Đổi Tài Khoản
-          </button>
         </div>
       </div>
 
