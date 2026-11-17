@@ -13,7 +13,7 @@ interface FeaturedProductsSectionProps {
 export const FeaturedProductsSection: React.FC<
   FeaturedProductsSectionProps
 > = ({ products }) => {
-  const { addToCart, openStoryModal } = useStudio();
+  const { openStoryModal } = useStudio();
   const [activeFilter, setActiveFilter] =
     useState<ProductCategoryFilter>("ALL");
 
@@ -123,10 +123,10 @@ export const FeaturedProductsSection: React.FC<
                 </button>
                 <button
                   type="button"
-                  onClick={() => addToCart(item)}
+                  onClick={() => openStoryModal(item)}
                   className="px-3 py-1.5 rounded-full bg-[#342A2A] text-[#FFFCF8] text-[11px] font-semibold hover:bg-[#B98C68] transition"
                 >
-                  + Giỏ hàng
+                  Chọn cấu hình
                 </button>
               </div>
             </div>

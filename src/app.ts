@@ -10,6 +10,7 @@ import appointmentRoutes from './routes/appointment.routes';
 import customOrderRoutes from './routes/customOrder.routes';
 import cartRoutes from './routes/cart.routes';
 import accountRoutes from './routes/account.routes';
+import orderRoutes from './routes/order.routes';
 
 import { notFoundHandler, globalErrorHandler } from './middlewares/errorHandler';
 
@@ -47,6 +48,7 @@ app.use('/api/appointments', appointmentRoutes);
 app.use('/api/custom-orders', customOrderRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/account', accountRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Error Handling Middlewares
 app.use(notFoundHandler);

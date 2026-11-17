@@ -3,7 +3,7 @@ import { useStudio } from "../../app/StudioContext";
 import { formatVnd } from "../../config/brand";
 
 export const CollectionsPage: React.FC = () => {
-  const { collections, products, openStoryModal, addToCart } = useStudio();
+  const { collections, products, openStoryModal } = useStudio();
 
   return (
     <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 space-y-12">
@@ -119,10 +119,10 @@ export const CollectionsPage: React.FC = () => {
                             </button>
                             <button
                               type="button"
-                              onClick={() => addToCart(item)}
+                              onClick={() => openStoryModal(item)}
                               className="px-2.5 py-1 rounded-full bg-[#342A2A] text-[#FFFCF8] text-[11px] font-semibold"
                             >
-                              + Giỏ hàng
+                              Chọn cấu hình
                             </button>
                           </div>
                         </div>

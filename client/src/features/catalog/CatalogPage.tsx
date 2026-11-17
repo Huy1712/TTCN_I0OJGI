@@ -4,7 +4,7 @@ import { formatVnd } from "../../config/brand";
 import { ProductCategoryFilter } from "../home/homeFixtures";
 
 export const CatalogPage: React.FC = () => {
-  const { products, addToCart, openStoryModal } = useStudio();
+  const { products, openStoryModal } = useStudio();
   const [searchQuery, setSearchQuery] = useState("");
   const [category, setCategory] = useState<ProductCategoryFilter>("ALL");
   const [selectedShape, setSelectedShape] = useState<string>("ALL");
@@ -168,10 +168,10 @@ export const CatalogPage: React.FC = () => {
                 </button>
                 <button
                   type="button"
-                  onClick={() => addToCart(item)}
+                  onClick={() => openStoryModal(item)}
                   className="px-3 py-1.5 rounded-full bg-[#342A2A] text-[#FFFCF8] text-[11px] font-semibold hover:bg-[#B98C68] transition"
                 >
-                  + Giỏ hàng
+                  Chọn cấu hình
                 </button>
               </div>
             </div>

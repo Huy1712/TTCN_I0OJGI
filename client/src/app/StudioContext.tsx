@@ -26,6 +26,9 @@ export interface CartItemEntry {
   selectedLength: string;
 }
 
+export const getCartEntryKey = (entry: CartItemEntry) =>
+  JSON.stringify([entry.product.id, entry.selectedShape, entry.selectedLength]);
+
 export interface CustomDesignRecord {
   id: string;
   title: string;
@@ -85,10 +88,11 @@ interface StudioContextValue {
   addToCart: (
     product: HomeProductPreview,
     shape?: string,
-    length?: string
+    length?: string,
+    quantity?: number
   ) => void;
-  removeFromCart: (productId: string) => void;
-  updateCartQuantity: (productId: string, delta: number) => void;
+  removeFromCart: (cartEntryKey: string) => void;
+  updateCartQuantity: (cartEntryKey: string, delta: number) => void;
   clearCart: () => void;
   isCartOpen: boolean;
   openCart: () => void;
@@ -211,6 +215,9 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isCartOpen, setIsCartOpen] = useState<boolean>(false);
   const [storyModalProduct, setStoryModalProduct] =
     useState<HomeProductPreview | null>(null);
+  const [selectedShape, setSelectedShape] = useState("");
+  const [selectedLength, setSelectedLength] = useState("");
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
 
   const [demoUserEmail, setDemoUserEmail] = useState<string | null>(null);
@@ -277,17 +284,31 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({
     (
       product: HomeProductPreview,
       shape = product.shapeOptions[0] || "Almond",
-      length = product.lengthOptions[0] || "Medium"
+      length = product.lengthOptions[0] || "Medium",
+      quantity = 1
     ) => {
+      if (
+        !Number.isInteger(quantity) ||
+        quantity < 1 ||
+        !product.shapeOptions.includes(shape) ||
+        !product.lengthOptions.includes(length)
+      ) {
+        showToast("Vui lòng chọn cấu hình và số lượng hợp lệ.");
+        return;
+      }
+
       setCart((prev) => {
         const existingIndex = prev.findIndex(
-          (item) => item.product.id === product.id
+          (item) =>
+            item.product.id === product.id &&
+            item.selectedShape === shape &&
+            item.selectedLength === length
         );
         if (existingIndex >= 0) {
           const updated = [...prev];
           updated[existingIndex] = {
             ...updated[existingIndex],
-            quantity: updated[existingIndex].quantity + 1,
+            quantity: updated[existingIndex].quantity + quantity,
           };
           return updated;
         }
@@ -295,28 +316,32 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({
           ...prev,
           {
             product,
-            quantity: 1,
+            quantity,
             selectedShape: shape,
             selectedLength: length,
           },
         ];
       });
       showToast(
-        `Đã thêm "${product.name}" vào giỏ hàng (${formatVnd(product.price)})`
+        `Đã thêm ${quantity} "${product.name}" vào giỏ hàng (${formatVnd(
+          product.price * quantity
+        )})`
       );
     },
     [showToast]
   );
 
-  const removeFromCart = useCallback((productId: string) => {
-    setCart((prev) => prev.filter((item) => item.product.id !== productId));
+  const removeFromCart = useCallback((cartEntryKey: string) => {
+    setCart((prev) =>
+      prev.filter((item) => getCartEntryKey(item) !== cartEntryKey)
+    );
   }, []);
 
-  const updateCartQuantity = useCallback((productId: string, delta: number) => {
+  const updateCartQuantity = useCallback((cartEntryKey: string, delta: number) => {
     setCart((prev) =>
       prev
         .map((item) =>
-          item.product.id === productId
+          getCartEntryKey(item) === cartEntryKey
             ? { ...item, quantity: Math.max(0, item.quantity + delta) }
             : item
         )
@@ -344,6 +369,9 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const openStoryModal = useCallback((product: HomeProductPreview) => {
     setStoryModalProduct(product);
+    setSelectedShape(product.shapeOptions[0] || "");
+    setSelectedLength(product.lengthOptions[0] || "");
+    setSelectedQuantity(1);
   }, []);
   const closeStoryModal = useCallback(() => {
     setStoryModalProduct(null);
@@ -644,11 +672,61 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({
                     {storyModalProduct.shapeOptions.join(", ")}
                   </div>
                 </div>
+                <div className="mt-4 grid grid-cols-2 gap-3">
+                  <label className="text-xs font-semibold text-[#342A2A]">
+                    Dáng móng
+                    <select
+                      value={selectedShape}
+                      onChange={(event) => setSelectedShape(event.target.value)}
+                      className="mt-1 w-full rounded-xl border border-[#342A2A]/15 bg-[#F7F1EA] px-3 py-2 text-sm"
+                    >
+                      {storyModalProduct.shapeOptions.map((shape) => (
+                        <option key={shape} value={shape}>
+                          {shape}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="text-xs font-semibold text-[#342A2A]">
+                    Độ dài
+                    <select
+                      value={selectedLength}
+                      onChange={(event) => setSelectedLength(event.target.value)}
+                      className="mt-1 w-full rounded-xl border border-[#342A2A]/15 bg-[#F7F1EA] px-3 py-2 text-sm"
+                    >
+                      {storyModalProduct.lengthOptions.map((length) => (
+                        <option key={length} value={length}>
+                          {length}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+                <label className="mt-3 block text-xs font-semibold text-[#342A2A]">
+                  Số lượng
+                  <input
+                    type="number"
+                    min={1}
+                    step={1}
+                    value={selectedQuantity}
+                    onChange={(event) =>
+                      setSelectedQuantity(
+                        Math.max(1, Number(event.target.value) || 1)
+                      )
+                    }
+                    className="mt-1 w-full rounded-xl border border-[#342A2A]/15 bg-[#F7F1EA] px-3 py-2 text-sm"
+                  />
+                </label>
               </div>
               <button
                 type="button"
                 onClick={() => {
-                  addToCart(storyModalProduct);
+                  addToCart(
+                    storyModalProduct,
+                    selectedShape,
+                    selectedLength,
+                    selectedQuantity
+                  );
                   closeStoryModal();
                 }}
                 className="w-full py-3 rounded-full bg-[#342A2A] text-[#FFFCF8] text-xs font-semibold uppercase tracking-widest hover:bg-[#B98C68] transition"
@@ -692,7 +770,7 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({
                 ) : (
                   cart.map((entry) => (
                     <div
-                      key={entry.product.id}
+                      key={getCartEntryKey(entry)}
                       className="flex items-center justify-between gap-3 p-3 rounded-2xl bg-[#F7F1EA] border border-[#342A2A]/10"
                     >
                       <img
@@ -716,7 +794,7 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({
                         <button
                           type="button"
                           onClick={() =>
-                            updateCartQuantity(entry.product.id, -1)
+                            updateCartQuantity(getCartEntryKey(entry), -1)
                           }
                           className="w-6 h-6 rounded-full bg-[#FFFCF8] border border-[#342A2A]/15 text-xs font-bold"
                         >
@@ -725,7 +803,7 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({
                         <button
                           type="button"
                           onClick={() =>
-                            updateCartQuantity(entry.product.id, 1)
+                            updateCartQuantity(getCartEntryKey(entry), 1)
                           }
                           className="w-6 h-6 rounded-full bg-[#FFFCF8] border border-[#342A2A]/15 text-xs font-bold"
                         >
@@ -733,7 +811,9 @@ export const StudioProvider: React.FC<{ children: React.ReactNode }> = ({
                         </button>
                         <button
                           type="button"
-                          onClick={() => removeFromCart(entry.product.id)}
+                          onClick={() =>
+                            removeFromCart(getCartEntryKey(entry))
+                          }
                           className="text-xs px-2.5 py-1 rounded-full bg-[#FFFCF8] hover:bg-[#E8B7B1]/40 text-[#342A2A] ml-1"
                         >
                           Xóa
