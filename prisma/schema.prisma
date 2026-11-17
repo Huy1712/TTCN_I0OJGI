@@ -163,7 +163,6 @@ model Address {
   recipientName String   @map("recipient_name") @db.VarChar(100)
   phone         String   @db.VarChar(20)
   province      String   @db.VarChar(100)
-  district      String   @db.VarChar(100)
   ward          String   @db.VarChar(100)
   addressLine   String   @map("address_line") @db.VarChar(255)
   isDefault     Boolean  @default(false) @map("is_default")
